@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\InvoicerNETCore\InvoicerNETCore.csproj" />
+    <ProjectReference Include="..\InvoicerNETCore\InvoicePrintFormat.csproj" />
   </ItemGroup>
 
 </Project>

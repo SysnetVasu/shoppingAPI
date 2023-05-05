@@ -1,4 +1,6 @@
-﻿using InvoicerNETCore.Models;
+﻿//using InvoicerNETCore.Models;
+using InvoicePrintFormat.Services;
+using InvoicePrintFormat.Models;
 using InvoicerNETCore.Services;
 using System.Collections.Generic;
 
@@ -11,7 +13,7 @@ namespace InvoicerNETCore.CLI
             new InvoicerApi(SizeOption.A4, OrientationOption.Portrait, "$")
                 .TextColor("#CC0000")
                 //.BackColor("#FFD6CC")
-                .Image(@"..\..\..\images\vodafone.jpg", 125, 27)
+                .Image1(@"..\..\..\images\vodafone.jpg", 125, 27)
                 .Company(Address.Make("Vodafone Limited", new string[] { "", "Vodafone House", "The Connection", "Newbury", "Berkshire RG14 2FN" }, "1471587", "569953277"))
                 .Client(Address.Make("BILLING TO", new string[] { "Isabella Marsh LKHFKLDJGL LDKFHGLJFDGL", "Overton Circle", "Little Welland", "Worcester", "WR## 2DJ" }))
                  .ClientDelivery(Address.Make("DELIVERY TO", new string[] { "Isabella Marsh KDHGLDAJGL LJDJGLDJGFDS", "Overton Circle", "Little Welland", "Worcester", "WR## 2DJ" }))

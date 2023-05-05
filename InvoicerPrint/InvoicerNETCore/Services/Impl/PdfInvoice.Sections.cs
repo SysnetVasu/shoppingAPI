@@ -1,6 +1,6 @@
 ﻿using InvoicePrintFormat.Helpers;
 using InvoicePrintFormat.Models;
-using InvoicerNETCore.Models;
+//using InvoicerNETCore.Models;
 using MigraDocCore.DocumentObjectModel;
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
 using MigraDocCore.DocumentObjectModel.Shapes;

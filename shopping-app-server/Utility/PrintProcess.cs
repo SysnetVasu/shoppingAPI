@@ -1,6 +1,7 @@
 ﻿using API.Entities;
 using API.ViewModel;
 using InvoicePrintFormat.Models;
+using InvoicePrintFormat.Services;
 using InvoicerNETCore.Services;
 using System.Collections.Generic;
 using System.Linq;
