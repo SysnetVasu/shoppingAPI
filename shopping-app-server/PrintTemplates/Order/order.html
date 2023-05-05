@@ -1,0 +1,172 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>OrderNo.: {{Number}}</title>
+    
+    <style>
+    .invoice-box{
+        /*max-width:800px;*/
+        margin:auto;
+        /*padding:30px;
+        border:1px solid #eee;
+        box-shadow:0 0 10px rgba(0, 0, 0, .15);*/
+        font-size:16px;
+        line-height:24px;
+        font-family:'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+        color:#555;
+    }
+    
+    .invoice-box table{
+        width:100%;
+        line-height:inherit;
+        text-align:left;
+    }
+    
+    .invoice-box table td{
+        padding:5px;
+        vertical-align:top;
+    }
+    
+    .invoice-box table tr td:nth-child(2){
+        text-align:right;
+    }
+    
+    .invoice-box table tr.top table td{
+        padding-bottom:20px;
+    }
+    
+    .invoice-box table tr.top table td.title{
+        font-size:45px;
+        line-height:45px;
+        color:#333;
+    }
+    
+    .invoice-box table tr.information table td{
+        padding-bottom:40px;
+    }
+    
+    .invoice-box table tr.heading td{
+        background:#eee;
+        border-bottom:1px solid #ddd;
+        font-weight:bold;
+    }
+    
+    .invoice-box table tr.details td{
+        padding-bottom:20px;
+    }
+    
+    .invoice-box table tr.item td{
+        border-bottom:1px solid #eee;
+    }
+    
+    .invoice-box table tr.item.last td{
+        border-bottom:none;
+    }
+    
+    .invoice-box table tr.total td:nth-child(2){
+        border-top:2px solid #eee;
+        font-weight:bold;
+    }
+    
+    </style>
+</head>
+
+<body>
+    <div class="invoice-box">
+        <table cellpadding="0" cellspacing="0">
+            <tr class="top">
+                <td>
+                    <table>
+                        <tr>
+                            <td class="title">
+                                <!-- <img src="/images/logo.png" style="width:100%; max-width:300px;"> -->
+                            </td>
+
+                            <td>
+                                Invoice #: {{Number}}<br>
+                                Created: {{FormatDate Date}}<br>
+                                Due: {{FormatDate DueDate}}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr class="information">
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                {{#Recipient}}
+                                {{Name}} <br />
+                                {{Email}}<br />
+                                {{#Address}}
+                                {{AddressLine1}}<br />
+                                {{AddressLine2}}<br />
+                                {{PostalCode}}{{City}}<br />
+                                {{Country}}<br />
+                                {{/Address}}
+                                {{/Recipient}}
+                            </td>
+
+                            <td>
+                                {{#Sender}}
+                                {{Name}} <br />
+                                {{#Address}}
+                                {{AddressLine1}}<br />
+                                {{AddressLine2}}<br />
+                                {{PostalCode}}{{City}}<br />
+                                {{Country}}<br />
+                                {{/Address}}
+                                {{Website}}<br />
+                                {{Email}}<br />
+                                {{/Sender}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">{{Message}}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr class="heading">
+                <td>Description</td>
+                <td>Quantity</td>
+                <td>Tax</td>
+                <td>Price</td>
+            </tr>
+
+            {{#Items}}
+
+            <tr class="item">
+                <td>
+                    {{Description}}
+                </td>
+                <td>{{Quantity}}</td>
+                <td>{{TaxPercentage}} %</td>
+                <td>{{FormatCurrency TotalIncludingTax}}</td>
+            </tr>
+
+            {{/Items}}
+
+            <tr class="total">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    Total:{{FormatCurrency TotalWithTaxes}}
+                </td>
+            </tr>
+        </table>
+        <p>{{PaymentRemarks}}</p>
+        <p>
+            {{#PaymentDetails}}
+            {{Recipient}} {{BankAccountNumber}}
+            {{/PaymentDetails}}
+        </p>
+    </div>
+</body>
+</html>
