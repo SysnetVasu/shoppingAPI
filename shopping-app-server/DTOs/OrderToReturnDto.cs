@@ -8,7 +8,7 @@ namespace API.DTOs
 {
     public class OrderToReturnDto
     {
-        public string Id { get; set; }
+        public Int64 Id { get; set; }
 
         //public DateTimeOffset OrderDate { get; set; }
 

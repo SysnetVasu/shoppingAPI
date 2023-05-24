@@ -22,7 +22,7 @@ namespace API.DTOs
         public double Total { get; set; }
         public string ProductId { get; set; }
         public string UnitId { get; set; }
-        public string OrderId { get; set; }
+        public Int64 OrdersId { get; set; }
         public UnitDto Unit {get;set;}
         public ProductDto Product { get; set; }
 

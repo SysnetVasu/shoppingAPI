@@ -50,7 +50,7 @@ namespace API.Controllers
         }
 
         [HttpGet("CreateInvoce")]
-        public async Task<ActionResult> CreatInvoice(string OrderNo)
+        public async Task<ActionResult> CreatInvoice(Int64 OrderNo)
         {
 
             try
@@ -265,7 +265,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task DeleteOrder(string id)
+        public async Task DeleteOrder(Int64 id)
         {
             //var order = _context.Orders.Include(o => o.OrderDetails).SingleOrDefaultAsync(o => o.Id== id);
             //_context.Orders.Remove(await order);

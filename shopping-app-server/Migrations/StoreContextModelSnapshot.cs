@@ -65,7 +65,7 @@ namespace API.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int?>("OrdersId")
                         .HasColumnType("int");
 
                     b.Property<double>("Price")
@@ -82,7 +82,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrdersId");
 
                     b.ToTable("OrderItems");
                 });
@@ -120,7 +120,7 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Entities.Orders.Order", null)
                         .WithMany("OrderItems")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrdersId");
                 });
 
             modelBuilder.Entity("API.Entities.Product", b =>

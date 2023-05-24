@@ -36,7 +36,7 @@ namespace API.Controllers
             
             try
             {
-                Guid orderId = Guid.NewGuid();
+                //Guid orderId = Guid.NewGuid();
                 var data = await _database.StringGetAsync(orderDto.CartId);
 
                 var cart = data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<UserCart>(data);
@@ -44,12 +44,12 @@ namespace API.Controllers
                 var items = new List<OrderDetail>();
                 foreach (var item in cart.Items)
                 {
-                    orderId = Guid.NewGuid();
+                    //orderId = Guid.NewGuid();
                     var productItem = await _context.Products.FindAsync(item.ProductId);
                     if (productItem == null) return null;
                     var orderItem = new OrderDetail(productItem.Id, productItem.Name, productItem.ThumbnailUrl, productItem.Price, item.Quantity, productItem.UnitId);
-                    orderItem.OrderId = orderId.ToString();
-                    orderItem.Id = Guid.NewGuid().ToString();
+                  //  orderItem.OrderId = orderId.ToString();
+                  //  orderItem.Id = Guid.NewGuid().ToString();
                     orderItem.UnitId = productItem.UnitId;
                     orderItem.Total = Convert.ToDecimal(item.Price * item.Quantity) - orderItem.Discount;
                     orderItem.Description = productItem.Description;
@@ -67,8 +67,8 @@ namespace API.Controllers
                 // save to db
                 this.Prefix = "ORD";
                 order.OrderNo = GetNextNumber();// "ORD-0002";
-                orderId = Guid.NewGuid();
-                order.Id = orderId.ToString();
+                //orderId = Guid.NewGuid();
+              //  order.Id = orderId.ToString();
                 order.CustomerId = cart.CustomerId;
                 order.OrderDate = DateTime.Today;
                 order.CreatedDate = DateTime.Now;
@@ -127,7 +127,7 @@ namespace API.Controllers
         //    return Ok(_mapper.Map<Entities.Orders.Order, OrderToReturnDto>(order));
         //}
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrderToReturnDto>> GetOrderByIdForUser(string id)
+        public async Task<ActionResult<OrderToReturnDto>> GetOrderByIdForUser(Int64 id)
         {
 
             var order = await _context.Orders
@@ -142,7 +142,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task DeleteOrder(string id)
+        public async Task DeleteOrder(Int64 id)
         {
             //var order = _context.Orders.Include(o => o.OrderDetails).SingleOrDefaultAsync(o => o.Id== id);
             //_context.Orders.Remove(await order);

@@ -4,7 +4,7 @@ using System;
 
 namespace API.Entities.Orders
 {
-    public class OrderDetail : BaseEntity
+    public class OrderDetail 
     {
         public OrderDetail()
         {
@@ -32,7 +32,7 @@ namespace API.Entities.Orders
             Quantity = quantity;
             UnitId = UnitId;            
         }
-
+        public Int64 Id { get; set; }
         public string Description { get; set; }
         public string ProductName { get; set; }
         public decimal Price { get; set; }
@@ -43,7 +43,7 @@ namespace API.Entities.Orders
         public Product Product { get; set; }
         public string UnitId { get; set; }
        
-        public string OrderId { get; set; }
+        public Int64 OrdersId { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public string UpdatedBy { get; set; }
@@ -51,7 +51,8 @@ namespace API.Entities.Orders
          public Boolean IsDeleted { get; set; }
         public Unit Unit { get; set; }
 
-        public virtual Order Order { get; set; }
+        public virtual Order Orders { get; set; }
+
         //public decimal? Total { get; set; }
     }
 }

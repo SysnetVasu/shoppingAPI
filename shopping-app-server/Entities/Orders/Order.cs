@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace API.Entities
 {
-    public class Order : BaseEntity
+    public class Order 
     {
         public Order()
         {
@@ -18,6 +18,7 @@ namespace API.Entities
             // Subtotal = subtotal;
             TotalPrice = subtotal;
         }
+        public Int64 Id { get; set; }
         public string OrderNo { get; set; }
         public long OrderStatusId { get; set; }
         public string CustomerId { get; set; }
