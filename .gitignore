@@ -1,0 +1,12 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/InvoicerPrint/InvoicerNETCore/bin/Debug/netcoreapp3.1
+/InvoicerPrint/InvoicerNETCore/obj/Debug/netcoreapp3.1
+/InvoicerPrint/InvoicerNETCore/obj
+/InvoicerPrint/InvoicerNETCore.CLI
+/shopping-app-server/bin/Debug/net5.0
+/shopping-app-server/obj
+/db

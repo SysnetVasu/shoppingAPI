@@ -198,7 +198,21 @@ namespace API.Controllers
                 //};
 
                 //var file = _converter.Convert(pdf);
-                return File("", "application/pdf", "Invoice.pdf");
+                string folderPath = "Content\\Invoice\\";
+                string fileName = model.InvoiceNo;
+                string filePath = Path.Combine(folderPath, $"{fileName}.pdf");
+
+                if (Directory.Exists(folderPath))
+                {
+                    // Read the file bytes
+                    byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+
+                    // Set the content type for the response
+                    string contentType = "application/pdf";
+
+                    return File(fileBytes, contentType, $"{fileName}.pdf");
+                }
+                return NotFound("The specified PDF document was not found.");
             }
             catch (Exception ex)
             {
