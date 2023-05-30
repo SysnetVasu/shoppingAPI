@@ -70,15 +70,15 @@ namespace API
             //        });
             //});
 
-            services.AddCors(options => options.AddPolicy("CorsPolicy",
-           builder =>
-           {
-               builder.AllowAnyHeader()
-                      .SetIsOriginAllowed(origin => true)
-                      .AllowAnyMethod()//.SetIsOriginAllowed((data) => true)
-                      .AllowCredentials()
-                      .WithOrigins("http://localhost", "http://ammanhq.dyndns.biz:5352", "http://ammanhq.dyndns.biz", "http://localhost:8100", "https://localhost:4200");
-           }));
+           // services.AddCors(options => options.AddPolicy("CorsPolicy",
+           //builder =>
+           //{
+           //    builder.AllowAnyHeader()
+           //           .SetIsOriginAllowed(origin => true)
+           //           .AllowAnyMethod()//.SetIsOriginAllowed((data) => true)
+           //           .AllowCredentials()
+           //           .WithOrigins("http://localhost", "http://ammanhq.dyndns.biz:5352", "http://ammanhq.dyndns.biz", "http://localhost:8100", "https://localhost:4200");
+           //}));
 
             services.AddCors(options => options.AddPolicy("CorsPolicy",
             builder =>
