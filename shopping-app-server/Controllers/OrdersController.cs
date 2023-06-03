@@ -47,7 +47,7 @@ namespace API.Controllers
                     //orderId = Guid.NewGuid();
                     var productItem = await _context.Products.FindAsync(item.ProductId);
                     if (productItem == null) return null;
-                    var orderItem = new OrderDetail(productItem.Id, productItem.Name, productItem.ThumbnailUrl, productItem.Price, item.Quantity, productItem.UnitId);
+                    var orderItem = new OrderDetail(productItem.Id, item.ProductName, productItem.ThumbnailUrl,(decimal) item.Price, item.Quantity, item.UnitId);
                   //  orderItem.OrderId = orderId.ToString();
                   //  orderItem.Id = Guid.NewGuid().ToString();
                     orderItem.UnitId = productItem.UnitId;
@@ -82,9 +82,71 @@ namespace API.Controllers
             {
                 return (null);
             }
-           
+                       
             
-            
+        }
+        [HttpPost("EditOrder")]
+        public async Task<ActionResult<Entities.Order>> EdiOrder(OrderToReturnDto editOrder)
+        {
+
+            try
+            {
+                ////Guid orderId = Guid.NewGuid();
+                //var data = await _database.StringGetAsync(orderDto.CartId);
+
+                //var cart = data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<UserCart>(data);
+
+
+                var order = await _context.Orders
+                  .Where(x => x.Id == editOrder.Id)
+                  .SingleOrDefaultAsync();
+                //if (order == null) return Ok(false) ;
+                var items = new List<OrderDetail>();
+                foreach (var item in editOrder.OrderDetails)
+                {
+                    //orderId = Guid.NewGuid();
+                    var productItem = await _context.Products.FindAsync(item.ProductId);
+                    if (productItem == null) return null;
+                    var orderItem = new OrderDetail(productItem.Id, item.ProductName, productItem.ThumbnailUrl, (decimal)item.Price, item.Quantity, item.UnitId);
+                    //  orderItem.OrderId = orderId.ToString();
+                    //  orderItem.Id = Guid.NewGuid().ToString();
+                    orderItem.UnitId = productItem.UnitId;
+                    orderItem.Total = Convert.ToDecimal(item.Price * item.Quantity) - orderItem.Discount;
+                    orderItem.Description = productItem.Description;
+                    orderItem.CreatedDate = DateTime.Today;
+                    orderItem.UpdatedDate = DateTime.Today;
+                    items.Add(orderItem);
+                }
+
+                // calc subtotal
+                var subtotal = items.Sum(item => item.Price * item.Quantity);
+
+                // create order
+                order = new Entities.Order(items, subtotal);
+
+                // save to db
+                this.Prefix = "ORD";
+                //order.OrderNo = GetNextNumber();// "ORD-0002";
+                //                                //orderId = Guid.NewGuid();
+                //                                //  order.Id = orderId.ToString();
+                //editOrder.CustomerId = order.CustomerId;
+                //editOrder.OrderDate = order.OrderDate;
+
+                //  editOrder.UpdatedDate = DateTime.Now;
+              //  var order = _mapper.Map<Entities.Order, OrderToReturnDto>(editOrder);
+
+                _context.Orders.Update(order);
+
+                var result = await _context.SaveChangesAsync();
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return (null);
+            }
+
+
+
         }
         private long GetNextValue()
         {
