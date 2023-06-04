@@ -15,7 +15,7 @@
             return new Address
             {
                 Title = title,
-                AddressLines = address,
+               AddressLines = address,
                 CompanyNumber = company,
                 VatNumber = vat,
             };

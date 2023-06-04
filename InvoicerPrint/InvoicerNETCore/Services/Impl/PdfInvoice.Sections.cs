@@ -272,7 +272,9 @@ namespace InvoicerNETCore.Services.Impl
             Section section = Pdf.LastSection;
 
             Address leftAddress = Invoice.Client;
-            Address rightAddress = Invoice.ClientDelivery;
+            Address rightAddress = Invoice.Client;
+
+            //Address rightAddress = Invoice.ClientDelivery;
 
             //if (Invoice.CompanyOrientation == PositionOption.Right)
             //    Utils.Swap<Address>(ref leftAddress, ref rightAddress);
