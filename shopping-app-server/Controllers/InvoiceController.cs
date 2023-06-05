@@ -82,18 +82,20 @@ namespace API.Controllers
 
                     //  orderId = Guid.NewGuid();
                     var productItem = await _context.Products.FindAsync(item.ProductId);
-                    double itemTaxAmt = ((double)TaxPer * item.Total);
-                    double itemNetTotal = (item.Total - item.Discount) + itemTaxAmt;
-                    var salesItem = new SalesDetail(productItem.Id, productItem.Name, productItem.ThumbnailUrl, item.Price, item.Quantity, productItem.UnitId,
+                    double itemTaxAmt = ((double)TaxPer * item.Price);
+                    double itemNetTotal = (item.Price - item.Discount) + itemTaxAmt;
+                    var salesItem = new SalesDetail(productItem.Id, productItem.Name, productItem.ThumbnailUrl, 
+                        item.Price, item.Quantity, productItem.UnitId,
                         item.Total, item.Discount, itemTaxAmt, itemNetTotal);
 
                     //orderItem.Id = orderId.ToString();
                     // salesItem.SalesHeaderId = SalesHeaderId;
                     salesItem.UnitId = productItem.UnitId;
-                    salesItem.Total = Convert.ToDouble(item.Price * item.Quantity) - salesItem.Discount;
+                   // salesItem.Total = Convert.ToDouble(item.Price * item.Quantity) - salesItem.Discount;
                     salesItem.Description = productItem.Description;
                     salesItem.CreatedDate = DateTime.Today;
                     salesItem.UpdatedDate = DateTime.Today;
+
                     items.Add(salesItem);
                 }
 
@@ -122,10 +124,11 @@ namespace API.Controllers
                 _context.SalesHeader.Add(invoice);
 
                 var saveInvoice = await _context.SaveChangesAsync();
+                
                 orders.OrderStatusId = 1;
                 _context.Update(orders);
-                var statusUpdate = await _context.SaveChangesAsync();
-                return Ok(saveInvoice);
+                var statusUpdate = await _context.SaveChangesAsync();             
+                return Ok(invoice.Id);
 
 
             }

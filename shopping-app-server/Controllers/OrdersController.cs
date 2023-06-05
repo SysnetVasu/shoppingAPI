@@ -41,20 +41,34 @@ namespace API.Controllers
 
                 var cart = data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<UserCart>(data);
 
+                double TaxPer = 0;
+                var company = _context.Companies.SingleOrDefault();
+                if (company != null)
+                {
+                    TaxPer = _context.Tax.Where(y => y.Id == company.TaxPerId).Select(x => x.TaxPer).SingleOrDefault();
+                }
+
                 var items = new List<OrderDetail>();
                 foreach (var item in cart.Items)
                 {
+                   
+
                     //orderId = Guid.NewGuid();
                     var productItem = await _context.Products.FindAsync(item.ProductId);
                     if (productItem == null) return null;
                     var orderItem = new OrderDetail(productItem.Id, item.ProductName, productItem.ThumbnailUrl,(decimal) item.Price, item.Quantity, item.UnitId);
-                  //  orderItem.OrderId = orderId.ToString();
-                  //  orderItem.Id = Guid.NewGuid().ToString();
+                    //  orderItem.OrderId = orderId.ToString();
+                    //  orderItem.Id = Guid.NewGuid().ToString();
+                   
+
                     orderItem.UnitId = productItem.UnitId;
                     orderItem.Total = Convert.ToDecimal(item.Price * item.Quantity) - orderItem.Discount;
                     orderItem.Description = productItem.Description;
                     orderItem.CreatedDate = DateTime.Today;
                     orderItem.UpdatedDate = DateTime.Today;
+
+                    double itemTaxAmt = ((double)TaxPer * (double) orderItem.Total);
+                    double itemNetTotal = ((double)orderItem.Total) + itemTaxAmt;
                     items.Add(orderItem);
                 }
 
@@ -63,6 +77,7 @@ namespace API.Controllers
 
                 // create order
                 var order = new Entities.Order(items, subtotal);
+               
 
                 // save to db
                 this.Prefix = "ORD";
