@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-   // [EnableCors("AllowOrigin")]
+    // [EnableCors("AllowOrigin")]
     public class ProductsController : BaseApiController
     {
         private readonly StoreContext _context;
@@ -63,7 +63,7 @@ namespace API.Controllers
         {
             var product = await _context.Products
                 .Include(p => p.Category)
-                .Include(p=>p.Unit)
+                .Include(p => p.Unit)
                 .Where(p => p.CategoryId == categoryId)
                 .ToListAsync();
 
@@ -75,7 +75,13 @@ namespace API.Controllers
         [HttpGet("categories")]
         public async Task<ActionResult<IReadOnlyList<Category>>> GetCategories()
         {
-            return Ok(await _context.Categories.ToListAsync());
+            return Ok(await _context.Categories.Where(x => x.IsDeleted == false).ToListAsync());
+        }
+
+        [HttpGet("promotiondisplay")]
+        public async Task<ActionResult<IReadOnlyList<PromotionDisplay>>> GetPromotionDisplay()
+        {
+            return Ok(await _context.PromotionDisplay.Where(x => x.IsDeleted == false).ToListAsync());
         }
 
     }

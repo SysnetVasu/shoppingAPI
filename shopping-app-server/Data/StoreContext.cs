@@ -27,6 +27,8 @@ namespace API.Data
         public DbSet<Tax> Tax { get; set; }
         public DbSet<SalesHeader> SalesHeader { get; set; }
         public DbSet<SalesDetail> SalesDetails { get; set; }
+        public DbSet<PromotionDisplay> PromotionDisplay { get; set; }
+
 
     }
 }

@@ -141,7 +141,7 @@ namespace API.Controllers
         //[Produces("application/octet-stream", Type = typeof(FileResult))]
         [HttpGet("PrintInvoice/{InvoiceNo}")]
 
-        public async Task<IActionResult> PrintInvoice(string InvoiceNo)
+        public async Task<IActionResult> PrintInvoice(long InvoiceNo)
         //  public async Task<IActionResult> PrintInvoice(string templateKey, string InvoiceNo)
         {
             try
@@ -155,7 +155,7 @@ namespace API.Controllers
                 var sale = await _context.SalesHeader
                  .Include(x => x.customer)
                  .Include(x => x.SalesDetails).ThenInclude(y => y.Product).ThenInclude(z => z.Unit)
-                 .Where(x => x.InvoiceNo == InvoiceNo && x.IsDeleted == 0)
+                 .Where(x => x.Id == InvoiceNo)
                  .SingleOrDefaultAsync();
                 if (sale == null) return null;
                 SalesHeader salesheader = new SalesHeader();

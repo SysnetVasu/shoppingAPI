@@ -13,16 +13,32 @@ namespace API.Utility
         public static void PrintingProcess(SalesHeaderViewModel invoice, Company companies,Customer client,Tax tax)
         {
 
+            if (client!=null)
+            {
+                if (client.Address == null) client.Address = "";
+                if (client.Email == null) client.Email = "";
+                if (client.PhoneNumber == null) client.PhoneNumber = "";
+                if (client.TaxNumber == null) client.TaxNumber = "";                
+            }
+            if (companies != null)
+            {
+                if (companies.Address1 == null) companies.Address1 = "";
+                if (companies.Address2 == null) companies.Address2 = "";
+                if (companies.Address3 == null) companies.Address3 = "";
+                if (companies.Email == null) companies.Email = "";
+                if (companies.Phone == null) companies.Phone = "";
+                if (companies.Country == null) companies.Country = "";
+            }
             var itemRowlist = new List<ItemRow>();
             List<SalesDetailsViewModel> itemInvoicedetails = new List<SalesDetailsViewModel>();
             itemInvoicedetails = invoice.salesdetailsVM.ToList();
             itemRowlist= itemInvoicedetails.Select(x=> new ItemRow
             {
                 Name = x.ProductName,
-                Description = "",
+                Description ="",
                 Price = (decimal)x.UnitPrice,
                 Total = (decimal)x.Total,
-                Discount = "",
+                Discount = "0",
                 Amount = (decimal)x.NetTotal,
                 VAT = (decimal)x.Tax
             }).ToList();
