@@ -64,7 +64,7 @@ namespace API.Controllers
                 var orders = await _context.Orders.Where(x => x.Id == OrderNo)
                .Include(x => x.Customer)
                .Include(o => o.OrderDetails).ThenInclude(y => y.Unit)
-               .OrderByDescending(x => x.CreatedDate)
+               //.OrderByDescending(x => x.CreatedDate)
                .SingleOrDefaultAsync();
                 if (orders == null) return null;
 
@@ -82,20 +82,23 @@ namespace API.Controllers
 
                     //  orderId = Guid.NewGuid();
                     var productItem = await _context.Products.FindAsync(item.ProductId);
-                    double itemTaxAmt = ((double)TaxPer * item.Price);
-                    double itemNetTotal = (item.Price - item.Discount) + itemTaxAmt;
+                    double itemTotal = item.Quantity * item.Price;
+                    itemTotal = itemTotal - item.Discount;
+                    double itemTaxAmt = (TaxPer * itemTotal)/100;
+                    double itemNetTotal = (itemTotal) + itemTaxAmt;
                     var salesItem = new SalesDetail(productItem.Id, productItem.Name, productItem.ThumbnailUrl, 
                         item.Price, item.Quantity, productItem.UnitId,
-                        item.Total, item.Discount, itemTaxAmt, itemNetTotal);
+                        itemTotal, item.Discount, itemTaxAmt, itemNetTotal);
 
                     //orderItem.Id = orderId.ToString();
                     // salesItem.SalesHeaderId = SalesHeaderId;
                     salesItem.UnitId = productItem.UnitId;
                    // salesItem.Total = Convert.ToDouble(item.Price * item.Quantity) - salesItem.Discount;
                     salesItem.Description = productItem.Description;
+                    salesItem.CreatedBy = "admin";
                     salesItem.CreatedDate = DateTime.Today;
                     salesItem.UpdatedDate = DateTime.Today;
-
+                    salesItem.UpdatedBy = "admin";
                     items.Add(salesItem);
                 }
 

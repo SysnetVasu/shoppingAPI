@@ -39,6 +39,9 @@ namespace API.Entities.Orders
         public int Quantity { get; set; }
         public decimal Discount { get; set; }
         public decimal Total { get; set; }
+        public decimal TaxAmount { get; set; }
+        public decimal NetTotal { get; set; }
+       // public Int64 TaxType { get; set; }
         public string ProductId { get; set; }
         public Product Product { get; set; }
         public string UnitId { get; set; }

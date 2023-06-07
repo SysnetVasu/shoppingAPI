@@ -23,6 +23,8 @@ namespace API.DTOs
         public decimal DiscountAmount { get; set; }
         public decimal RefundedAmount { get; set; }
         public decimal TaxAmount { get; set; }
+        public decimal NetTotal { get; set; }
+        public int TaxType { get; set; }
         public string Notes { get; set; }
         public CustomerDto Customer { get; set; }
         public ICollection<OrderDetailDto> OrderDetails { get; set; }

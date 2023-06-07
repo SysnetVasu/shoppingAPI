@@ -41,13 +41,18 @@ namespace API.Controllers
 
                 var cart = data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<UserCart>(data);
 
-                double TaxPer = 0;
+                decimal TaxPer = 0;
                 var company = _context.Companies.SingleOrDefault();
                 if (company != null)
                 {
-                    TaxPer = _context.Tax.Where(y => y.Id == company.TaxPerId).Select(x => x.TaxPer).SingleOrDefault();
+                    TaxPer =(decimal) _context.Tax.Where(y => y.Id == company.TaxPerId).Select(x => x.TaxPer).SingleOrDefault();
                 }
-
+                int TaxType = 0;
+                var customer = _context.Customers.SingleOrDefault(x=>x.CustomerId == cart.CustomerId);
+                if (customer != null)
+                {
+                    TaxType = customer.TaxType;
+                }
                 var items = new List<OrderDetail>();
                 foreach (var item in cart.Items)
                 {
@@ -62,21 +67,25 @@ namespace API.Controllers
                    
 
                     orderItem.UnitId = productItem.UnitId;
-                    orderItem.Total = Convert.ToDecimal(item.Price * item.Quantity) - orderItem.Discount;
+                    orderItem.Total = Convert.ToDecimal(item.Price * item.Quantity) - orderItem.Discount ;
                     orderItem.Description = productItem.Description;
                     orderItem.CreatedDate = DateTime.Today;
                     orderItem.UpdatedDate = DateTime.Today;
 
-                    double itemTaxAmt = ((double)TaxPer * (double) orderItem.Total);
-                    double itemNetTotal = ((double)orderItem.Total) + itemTaxAmt;
+                    decimal itemTaxAmt = (TaxPer * orderItem.Total)/100;
+                    decimal itemNetTotal = (orderItem.Total) + itemTaxAmt;
+                    orderItem.TaxAmount = itemTaxAmt;
+                    orderItem.NetTotal = itemNetTotal;
                     items.Add(orderItem);
                 }
 
-                // calc subtotal
-                var subtotal = items.Sum(item => item.Price * item.Quantity);
 
+                // calc total
+                var subtotal = items.Sum(item => item.Price * item.Quantity);
+                var taxamount = items.Sum(item => item.TaxAmount);
+                var nettotal = items.Sum(item => item.NetTotal);
                 // create order
-                var order = new Entities.Order(items, subtotal);
+                var order = new Entities.Order(items, subtotal,taxamount,nettotal);
                
 
                 // save to db
@@ -84,10 +93,13 @@ namespace API.Controllers
                 order.OrderNo = GetNextNumber();// "ORD-0002";
                 //orderId = Guid.NewGuid();
               //  order.Id = orderId.ToString();
+              
                 order.CustomerId = cart.CustomerId;
                 order.OrderDate = DateTime.Today;
                 order.CreatedDate = DateTime.Now;
+                order.CreatedBy = "Apps";
                 order.UpdatedDate = DateTime.Now;
+                order.UpdatedBy = "Apps";
                 _context.Orders.Add(order);
 
               var  result = await _context.SaveChangesAsync();
@@ -110,7 +122,12 @@ namespace API.Controllers
                 //var data = await _database.StringGetAsync(orderDto.CartId);
 
                 //var cart = data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<UserCart>(data);
-
+                decimal TaxPer = 0;
+                var company = _context.Companies.SingleOrDefault();
+                if (company != null)
+                {
+                    TaxPer = (decimal)_context.Tax.Where(y => y.Id == company.TaxPerId).Select(x => x.TaxPer).SingleOrDefault();
+                }
 
                 var order = await _context.Orders
                   .Where(x => x.Id == editOrder.Id)
@@ -130,14 +147,22 @@ namespace API.Controllers
                     orderItem.Description = productItem.Description;
                     orderItem.CreatedDate = DateTime.Today;
                     orderItem.UpdatedDate = DateTime.Today;
+
+                    decimal itemTaxAmt = (TaxPer * orderItem.Total) / 100;
+                    decimal itemNetTotal = (orderItem.Total) + itemTaxAmt;
+                    orderItem.TaxAmount = itemTaxAmt;
+                    orderItem.NetTotal = itemNetTotal;
                     items.Add(orderItem);
                 }
 
-                // calc subtotal
-                var subtotal = items.Sum(item => item.Price * item.Quantity);
 
+
+                // calc total
+                var subtotal = items.Sum(item => item.Price * item.Quantity);
+                var taxamount = items.Sum(item => item.TaxAmount);
+                var nettotal = items.Sum(item => item.NetTotal);
                 // create order
-                order = new Entities.Order(items, subtotal);
+                 order = new Entities.Order(items, subtotal, taxamount, nettotal);
 
                 // save to db
                 this.Prefix = "ORD";

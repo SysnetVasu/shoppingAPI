@@ -11,12 +11,14 @@ namespace API.Entities
         {
         }
 
-        public Order(IReadOnlyList<OrderDetail> orderItems, decimal subtotal)
+        public Order(IReadOnlyList<OrderDetail> orderItems, decimal subtotal,decimal taxamount,decimal nettotal)
         {
             
             OrderDetails = orderItems;
             // Subtotal = subtotal;
             TotalPrice = subtotal;
+            TaxAmount = taxamount;
+            NetTotal = nettotal;
         }
         public Int64 Id { get; set; }
         public string OrderNo { get; set; }
@@ -27,6 +29,8 @@ namespace API.Entities
         public decimal DiscountAmount { get; set; }
         public decimal RefundedAmount { get; set; }
         public decimal TaxAmount { get; set; }
+        public decimal NetTotal { get; set; }
+        public int TaxType { get; set; }
         public string Notes { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
