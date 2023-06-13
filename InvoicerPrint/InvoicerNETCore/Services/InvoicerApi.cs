@@ -115,6 +115,11 @@ namespace InvoicePrintFormat.Services
             Invoice.Details = details;
             return this;
         }
+        public IInvoicerOptions FooterText(List<FooterRow> textvalue)
+        {
+            Invoice.FooterText = textvalue;
+            return this;
+        }
 
         public IInvoicerOptions Footer(string title)
         {

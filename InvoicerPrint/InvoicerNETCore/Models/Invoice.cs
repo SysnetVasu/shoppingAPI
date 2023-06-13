@@ -25,6 +25,7 @@ namespace InvoicePrintFormat.Models
         public Address Company { get; set; }
         public PositionOption CompanyOrientation { get; set; }
         public List<DetailRow> Details { get; set; }
+        public List<FooterRow> FooterText { get; set; }
         public string Footer { get; set; }
         public List<ItemRow> Items { get; set; }
         public List<TotalRow> Totals { get; set; }

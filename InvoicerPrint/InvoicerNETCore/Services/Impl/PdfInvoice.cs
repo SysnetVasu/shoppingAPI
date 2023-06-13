@@ -67,7 +67,7 @@ namespace InvoicerNETCore.Services.Impl
                 Document = Pdf
             };
             renderer.RenderDocument();
-            if (!string.IsNullOrEmpty(password))
+          if (!string.IsNullOrEmpty(password))
                 SetPassword(renderer, password);
             renderer.PdfDocument.Save(filename);
         }
@@ -85,6 +85,7 @@ namespace InvoicerNETCore.Services.Impl
            HeaderSection();
             AddressSection();
             BillingSection();
+            FooterTextSection();
             PaymentSection();
             FooterSection();
         }

@@ -80,6 +80,8 @@ namespace InvoicePrintFormat.Services
         /// </summary>
         IInvoicerOptions Footer(string title);
 
+        IInvoicerOptions FooterText(List<FooterRow> textvalue);
+
         /// <summary>
         /// Add a new product or service row to your document below the company and 
         /// client information, paging is automatic.

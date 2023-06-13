@@ -89,11 +89,15 @@ namespace InvoicerNETCore.Services.Impl
             
             row.Shading.Color = Colors.White;
             ////company Name
-            row.Cells[1].AddParagraph(Invoice.Company.Title, ParagraphAlignment.Left, "H2-18A-Color");
-            ////company address
-            //row.Cells[1].AddParagraph(Invoice.Company.AddressLines.ToString(),ParagraphAlignment.Justify);
-            AddressCell(row.Cells[1], companyAddress.AddressLines);
-                        
+            row.Cells[1].AddParagraph(Invoice.Company.Title, ParagraphAlignment.Center, "H2-18A-Color");
+            ////company address1
+           if (Invoice.Company.AddressLines[0] != "") row.Cells[1].AddParagraph(Invoice.Company.AddressLines[0],ParagraphAlignment.Center);
+            row.Cells[1].AddParagraph(Invoice.Company.AddressLines[1], ParagraphAlignment.Center);
+            row.Cells[1].AddParagraph(Invoice.Company.AddressLines[2], ParagraphAlignment.Center);
+            row.Cells[1].AddParagraph(Invoice.Company.AddressLines[3], ParagraphAlignment.Center);
+            row.Cells[1].AddParagraph(Invoice.Company.AddressLines[4], ParagraphAlignment.Center);
+            // AddressCell(row.Cells[1], companyAddress.AddressLines);
+
             ////company logo -right
             if (!string.IsNullOrEmpty(Invoice.Image2))
             {
@@ -272,7 +276,7 @@ namespace InvoicerNETCore.Services.Impl
             Section section = Pdf.LastSection;
 
             Address leftAddress = Invoice.Client;
-            Address rightAddress = Invoice.Client;
+            Address rightAddress = null;
 
             //Address rightAddress = Invoice.ClientDelivery;
 
@@ -281,25 +285,25 @@ namespace InvoicerNETCore.Services.Impl
 
             Table table = section.AddTable();
             table.AddColumn(ParagraphAlignment.Left, section.Document.PageWidth() / 2-42);
-            table.AddColumn(ParagraphAlignment.Left,section.Document.PageWidth() / 3);
+            table.AddColumn(ParagraphAlignment.Left,section.Document.PageWidth() / 4);
            // table.AddColumn(ParagraphAlignment.Left, section.Document.PageWidth() / 10);
             table.AddColumn(ParagraphAlignment.Left, section.Document.PageWidth()/7);
-            table.AddColumn(ParagraphAlignment.Left, section.Document.PageWidth() / 15-10);
+            table.AddColumn(ParagraphAlignment.Left, (section.Document.PageWidth()/15)- 15-15);
 
             Row row = table.AddRow();
-            row.Style = "H2-10B-Color";
+            row.Style = "H2-12B-Color";
             row.Shading.Color = Colors.White;
             if (leftAddress != null) row.Cells[0].AddParagraph(leftAddress.Title, ParagraphAlignment.Left);
             if (rightAddress != null) row.Cells[1].AddParagraph(rightAddress.Title, ParagraphAlignment.Left);
-
-            row.Cells[3].AddParagraph("INVOICE", ParagraphAlignment.Right, "H2-22A-Color");
+            row.Cells[2].AddParagraph("TAX  ", ParagraphAlignment.Left, "H2-16A-Color");
+            row.Cells[3].AddParagraph("INVOICE", ParagraphAlignment.Center, "H2-16A-Color");
             // row.Cells[0].Format.Borders.Bottom = BorderLine;
             //   row.Cells[2].AddParagraph(rightAddress.Title, ParagraphAlignment.Left);
             //row.Cells[2].Format.Borders.Bottom = BorderLine;
 
             row = table.AddRow();
             //billing to
-            
+            row.Style = "H2-12B-Color";
             AddressCell(row.Cells[0], leftAddress.AddressLines);
             ////Delivery To
             if (rightAddress!=null)
@@ -309,11 +313,11 @@ namespace InvoicerNETCore.Services.Impl
             }
                      
 
-            row.Cells[2].AddParagraph("INVOICE NO.:", ParagraphAlignment.Left, "H2-9B-Color");
+            row.Cells[2].AddParagraph("Invoice No.:", ParagraphAlignment.Left, "H2-9B-Color");
             row.Cells[3].AddParagraph(Invoice.Reference, ParagraphAlignment.Left, "H2-9");
-            row.Cells[2].AddParagraph("INVOICE DATE:", ParagraphAlignment.Left, "H2-9B-Color");
+            row.Cells[2].AddParagraph("Invoice Date:", ParagraphAlignment.Left, "H2-9B-Color");
             row.Cells[3].AddParagraph(Invoice.BillingDate.ToShortDateString(), ParagraphAlignment.Left, "H2-9");
-            row.Cells[2].AddParagraph("DUE DATE:", ParagraphAlignment.Left, "H2-9B-Color");
+            row.Cells[2].AddParagraph("Due Date:", ParagraphAlignment.Left, "H2-9B-Color");
             row.Cells[3].AddParagraph(Invoice.DueDate.ToShortDateString(), ParagraphAlignment.Left, "H2-9");
           //  AddressCell(row.Cells[2], leftAddress.AddressLines);
             _ = table.AddRow();
@@ -325,9 +329,13 @@ namespace InvoicerNETCore.Services.Impl
             {
                 Paragraph name = cell.AddParagraph();
                 if (line == address[0])
-                    name.AddFormattedText(line, "H2-10B");
+                    name.AddFormattedText(line, "H2-9-Grey");
                 else
                     name.AddFormattedText(line, "H2-9-Grey");
+                //if (line == address[0])
+                //    name.AddFormattedText(line, "H2-10B");
+                //else
+                //    name.AddFormattedText(line, "H2-9-Grey");
             }
         }
 
@@ -346,6 +354,7 @@ namespace InvoicerNETCore.Services.Impl
             table.AddColumn(ParagraphAlignment.Center, numericWidth);
             if (Invoice.HasDiscount)
                 table.AddColumn(ParagraphAlignment.Center, numericWidth);
+            table.AddColumn(ParagraphAlignment.Center, numericWidth);
             table.AddColumn(ParagraphAlignment.Center, numericWidth);
 
             BillingHeader(table);
@@ -377,18 +386,18 @@ namespace InvoicerNETCore.Services.Impl
             row.TopPadding = 5;
             //row.Borders.Bottom = BorderLine;
 
-            row.Cells[0].AddParagraph("PRODUCT", ParagraphAlignment.Left);
-            row.Cells[1].AddParagraph("AMOUNT", ParagraphAlignment.Center);
-            row.Cells[2].AddParagraph("VAT %", ParagraphAlignment.Center);
-            row.Cells[3].AddParagraph("UNIT PRICE", ParagraphAlignment.Center);
+            row.Cells[0].AddParagraph("Product Description", ParagraphAlignment.Left);
+            row.Cells[1].AddParagraph("Qty", ParagraphAlignment.Center);
+            row.Cells[2].AddParagraph("Uom", ParagraphAlignment.Center);
+            row.Cells[3].AddParagraph("UnitPrice", ParagraphAlignment.Center);
             if (Invoice.HasDiscount)
             {
-                row.Cells[4].AddParagraph("DISCOUNT", ParagraphAlignment.Center);
-                row.Cells[5].AddParagraph("TOTAL", ParagraphAlignment.Center);
+                row.Cells[4].AddParagraph("Discount", ParagraphAlignment.Center);
+                row.Cells[5].AddParagraph("Total", ParagraphAlignment.Center);
             }
             else
             {
-                row.Cells[4].AddParagraph("TOTAL", ParagraphAlignment.Center);
+                row.Cells[4].AddParagraph("Total", ParagraphAlignment.Center);
             }
             row = table.AddRow();
             row.Borders.Bottom = BorderLine;
@@ -402,15 +411,15 @@ namespace InvoicerNETCore.Services.Impl
 
             Cell cell = row.Cells[0];
             cell.AddParagraph(item.Name, ParagraphAlignment.Left, "H2-9B");
-            cell.AddParagraph(item.Description, ParagraphAlignment.Left, "H2-9-Grey");
+            //cell.AddParagraph(item.Description, ParagraphAlignment.Left, "H2-9-Grey");
 
             cell = row.Cells[1];
             cell.VerticalAlignment = VerticalAlignment.Center;
-            cell.AddParagraph(item.Amount.ToCurrency(), ParagraphAlignment.Center, "H2-9");
+            cell.AddParagraph(item.Qty.ToString(), ParagraphAlignment.Right, "H2-9");
 
             cell = row.Cells[2];
             cell.VerticalAlignment = VerticalAlignment.Center;
-            cell.AddParagraph(item.VAT.ToCurrency(), ParagraphAlignment.Center, "H2-9");
+            cell.AddParagraph(item.Uom, ParagraphAlignment.Center, "H2-9");
 
             cell = row.Cells[3];
             cell.VerticalAlignment = VerticalAlignment.Center;
@@ -432,6 +441,7 @@ namespace InvoicerNETCore.Services.Impl
                 cell.VerticalAlignment = VerticalAlignment.Center;
                 cell.AddParagraph(item.Total.ToCurrency(Invoice.Currency), ParagraphAlignment.Center, "H2-9");
             }
+            
         }
 
         private void BillingTotal(Table table, TotalRow total)
@@ -470,6 +480,8 @@ namespace InvoicerNETCore.Services.Impl
                 cell = row.Cells[5];
                 //  cell.Shading.Color = shading;
                 cell.AddParagraph(total.Value.ToCurrency(Invoice.Currency), ParagraphAlignment.Center, font);
+
+
             }
             else
             {
@@ -512,29 +524,61 @@ namespace InvoicerNETCore.Services.Impl
                 }
             }
 
-            if (Invoice.Company.HasCompanyNumber || Invoice.Company.HasVatNumber)
+            //if (Invoice.Company.HasCompanyNumber || Invoice.Company.HasVatNumber)
+            //{
+            //    row = table.AddRow();
+
+            //    Color shading = MigraDocHelpers.TextColorFromHtml(Invoice.TextColor);
+
+            //    if (Invoice.Company.HasCompanyNumber && Invoice.Company.HasVatNumber)
+            //    {
+            //        row.Cells[0].AddParagraph(string.Format("Company Number: {0}, VAT Number: {1}",
+            //            Invoice.Company.CompanyNumber, Invoice.Company.VatNumber),
+            //            ParagraphAlignment.Center, "H2-9B-Inverse")
+            //            .Format.Shading.Color = shading;
+            //    }
+            //    else
+            //    {
+            //        if (Invoice.Company.HasCompanyNumber)
+            //            row.Cells[0].AddParagraph(string.Format("Company Number: {0}", Invoice.Company.CompanyNumber),
+            //            ParagraphAlignment.Center, "H2-9B-Inverse")
+            //            .Format.Shading.Color = shading;
+            //        else
+            //            row.Cells[0].AddParagraph(string.Format("VAT Number: {0}", Invoice.Company.VatNumber),
+            //            ParagraphAlignment.Center, "H2-9B-Inverse")
+            //            .Format.Shading.Color = shading;
+            //    }
+            //}
+
+
+        }
+
+        private void FooterTextSection()
+        {
+            Section section = Pdf.LastSection;
+
+            Table table = section.AddTable();
+            table.AddColumn(Unit.FromPoint(section.Document.PageWidth()));
+            Row row = table.AddRow();
+
+            if (Invoice.FooterText != null && Invoice.FooterText.Count > 0)
             {
-                row = table.AddRow();
-
-                Color shading = MigraDocHelpers.TextColorFromHtml(Invoice.TextColor);
-
-                if (Invoice.Company.HasCompanyNumber && Invoice.Company.HasVatNumber)
+                foreach (FooterRow detail in Invoice.FooterText)
                 {
-                    row.Cells[0].AddParagraph(string.Format("Company Number: {0}, VAT Number: {1}",
-                        Invoice.Company.CompanyNumber, Invoice.Company.VatNumber),
-                        ParagraphAlignment.Center, "H2-9B-Inverse")
-                        .Format.Shading.Color = shading;
-                }
-                else
-                {
-                    if (Invoice.Company.HasCompanyNumber)
-                        row.Cells[0].AddParagraph(string.Format("Company Number: {0}", Invoice.Company.CompanyNumber),
-                        ParagraphAlignment.Center, "H2-9B-Inverse")
-                        .Format.Shading.Color = shading;
-                    else
-                        row.Cells[0].AddParagraph(string.Format("VAT Number: {0}", Invoice.Company.VatNumber),
-                        ParagraphAlignment.Center, "H2-9B-Inverse")
-                        .Format.Shading.Color = shading;
+                    row.Cells[0].AddParagraph(detail.TextValue, ParagraphAlignment.Left, "H2-9B-Color");
+                    //  row.Cells[0].Borders.Bottom = BorderLine;
+
+                    //row = table.AddRow();
+                    //TextFrame frame = null;
+                    //foreach (string line in detail.Paragraphs)
+                    //{
+                    //    if (line == detail.Paragraphs[0])
+                    //    {
+                    //        frame = row.Cells[0].AddTextFrame();
+                    //        frame.Width = section.Document.PageWidth();
+                    //    }
+                    //    frame.AddParagraph(line, ParagraphAlignment.Left, "H2-9");
+                    //}
                 }
             }
         }
