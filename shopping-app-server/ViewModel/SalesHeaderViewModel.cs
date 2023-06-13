@@ -18,6 +18,8 @@ namespace API.ViewModel
                        double totaldiscount,
                        string taxid,
                        double totaltax,
+                       double granttotal,
+                       double nettotal,
                        //SenderViewModel sender,
                        //RecipientViewModel recipient,
                        //string message,
@@ -35,6 +37,8 @@ namespace API.ViewModel
             TotalDiscount = totaldiscount;
             TaxId = taxid;
             TotalTax = totaltax;
+            GrandTotal = granttotal;
+            NetTotal = nettotal;
             //Sender = sender;
             //Recipient = recipient;
             //Message = message;

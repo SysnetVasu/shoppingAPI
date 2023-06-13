@@ -18,7 +18,9 @@ namespace Api.Extensions
                 source.Discount,
                 source.TotalDiscount,
                 source.TaxId,
-                source.TotalTax,                   
+                source.TotalTax,    
+                source.GrandTotal,
+                source.NetTotal,
                 //source.Sender.MapToModel(),
                 //source.Recipient.MapToModel(),
                 //source.Message,
@@ -53,12 +55,13 @@ namespace Api.Extensions
         public static SalesDetailsViewModel MapToModel(this SalesDetail source) =>
             new SalesDetailsViewModel(
                  source.ProductId,
-                 source.ProductName,                
-                 source.UnitPrice,
-                 source.Quantity,
-                 source.UnitId,
-                 source.Total,
+                 source.ProductName,
+                   source.Quantity,
+                   source.UnitId,
+                   source.UnitName,
+                  source.UnitPrice,
                  source.Discount,
+                 source.Total,               
                  source.Tax,
                  source.NetTotal
                  );

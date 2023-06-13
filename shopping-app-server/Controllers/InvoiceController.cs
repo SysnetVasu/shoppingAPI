@@ -74,27 +74,38 @@ namespace API.Controllers
                 //  var data = await _context.Orders.FindAsync(invoiceDto.OrderNo);
 
                 //  var cart = data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<UserCart>(data);
-                var SalesHeaderId = "IN-" + GetNextNumber();
+                //var SalesHeaderId = "IN-" + GetNextNumber();
+                //var SalesHeaderId = GetNextNumber();
+                var vouchersetting = _context.VoucherSettings.Where(x => x.VoucherName == "SALESINVOICE").SingleOrDefault();
+                var SalesHeaderId = vouchersetting.VoucherPreFix + DateTime.Now.ToString("yyyyMM")
+                            + String.Format("{0, 0:D5}", vouchersetting.VoucherNextNumber);
 
                 var items = new List<SalesDetail>();
-                foreach (var item in result.OrderDetails)
+                foreach (var item in orders.OrderDetails)
                 {
 
                     //  orderId = Guid.NewGuid();
                     var productItem = await _context.Products.FindAsync(item.ProductId);
-                    double itemTotal = item.Quantity * item.Price;
-                    itemTotal = itemTotal - item.Discount;
+                    double itemTotal = (double)(item.Quantity * item.Price);
+                    itemTotal = ((double)itemTotal - (double)item.Discount);
                     double itemTaxAmt = (TaxPer * itemTotal)/100;
                     double itemNetTotal = (itemTotal) + itemTaxAmt;
                     var salesItem = new SalesDetail(productItem.Id, productItem.Name, productItem.ThumbnailUrl, 
-                        item.Price, item.Quantity, productItem.UnitId,
-                        itemTotal, item.Discount, itemTaxAmt, itemNetTotal);
+                        (double)item.Price, item.Quantity, item.UnitId,item.Unit.Name,
+                        itemTotal, (double)item.Discount, itemTaxAmt, itemNetTotal);
 
                     //orderItem.Id = orderId.ToString();
                     // salesItem.SalesHeaderId = SalesHeaderId;
-                    salesItem.UnitId = productItem.UnitId;
+                    //salesItem.UnitId = productItem.UnitId;
                    // salesItem.Total = Convert.ToDouble(item.Price * item.Quantity) - salesItem.Discount;
-                    salesItem.Description = productItem.Description;
+                   if (item.Description==null)
+                    {
+                        salesItem.Description = "";
+                    }
+                    else
+                    {
+                        salesItem.Description = item.Description;
+                    }                       
                     salesItem.CreatedBy = "admin";
                     salesItem.CreatedDate = DateTime.Today;
                     salesItem.UpdatedDate = DateTime.Today;
@@ -113,7 +124,7 @@ namespace API.Controllers
 
                 // save to db
                 this.Prefix = "ORD";
-                invoice.InvoiceNo = SalesHeaderId;
+                invoice.InvoiceNo = SalesHeaderId.ToString();
                 invoice.TaxId = company.TaxPerId;
                 invoice.OrderNo = orders.OrderNo;
                 invoice.VoucherNo = orders.OrderNo;
@@ -125,12 +136,16 @@ namespace API.Controllers
                 invoice.UpdatedDate = DateTime.Now;
 
                 _context.SalesHeader.Add(invoice);
-
                 var saveInvoice = await _context.SaveChangesAsync();
                 
                 orders.OrderStatusId = 1;
                 _context.Update(orders);
-                var statusUpdate = await _context.SaveChangesAsync();             
+                var statusUpdate = await _context.SaveChangesAsync();
+
+                vouchersetting.VoucherNextNumber = vouchersetting.VoucherNextNumber + 1;
+                _context.Update(vouchersetting);
+                var updateNumber = await _context.SaveChangesAsync();
+
                 return Ok(invoice.Id);
 
 
@@ -176,34 +191,9 @@ namespace API.Controllers
 
                 // Invoice invoice = Invoice();
                 var model = sale.MapToModel();
+                
                 PrintProcess.PrintingProcess(model, company, client, tax);
-
-
-                //var globalSettings = new GlobalSettings
-                //{
-                //    ColorMode = ColorMode.Color,
-                //    Orientation = Orientation.Portrait,
-                //    PaperSize = PaperKind.A4,
-                //    Margins = new MarginSettings { Top = 10 },
-                //    DocumentTitle = "PDF Report",
-                //    Out = @"D:\temp\PDFCreator\Invoice_" + sale.InvoiceNo.ToString() + ".pdf"
-                //};
-                //var objectSettings = new ObjectSettings
-                //{
-                //    PagesCount = true,
-                //    // HtmlContent = html,
-                //    HtmlContent = InvoiceGenerator.GetHTMLString(model),
-                //    WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "assets", "styles.css") },
-                //    HeaderSettings = { FontName = "Arial", FontSize = 9, Right = "Page [page] of [toPage]", Line = true },
-                //    FooterSettings = { FontName = "Arial", FontSize = 9, Line = true, Center = "Report Footer" }
-                //};
-                //var pdf = new HtmlToPdfDocument()
-                //{
-                //    GlobalSettings = globalSettings,
-                //    Objects = { objectSettings }
-                //};
-
-                //var file = _converter.Convert(pdf);
+              
                 string folderPath = "Content\\Invoice\\";
                 string fileName = model.InvoiceNo;
                 string filePath = Path.Combine(folderPath, $"{fileName}.pdf");
@@ -237,8 +227,20 @@ namespace API.Controllers
 
         private string GetNextNumber()
         {
-            long n = long.Parse(DateTime.Now.ToString("yyyyMMddHHmmss"));
-            return n.ToString();
+            try
+            {
+                var vouchersetting =  _context.VoucherSettings.Where(x => x.VoucherName == "SALESINVOICE").SingleOrDefault();
+                var InvoiceNo = vouchersetting.VoucherPreFix + DateTime.Now.ToString("yyyyMM")
+                            + String.Format("{0, 0:D5}", vouchersetting.VoucherNextNumber);
+                // long n = long.Parse(DateTime.Now.ToString("yyyyMMddHHmmss"));
+                return InvoiceNo;
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+                return null;
+            }
+           
             //return $"{this.Prefix}{this.GetNextValue():000000}";
         }
 

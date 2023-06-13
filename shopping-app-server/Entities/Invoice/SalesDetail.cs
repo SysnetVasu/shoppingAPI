@@ -25,13 +25,15 @@ namespace API.Entities
         //public int Quantity { get; set; }
 
         public SalesDetail(string productItemId, string productName, string imageUrl, double price, double quantity, string unitId,
+            string unitname,
             double TotalAmount, double DiscountAmount, double taxAmount, double NetTotalAmount)
         {
             ProductId = productItemId;
             ProductName = productName;
             UnitPrice = price;
             Quantity = quantity;
-            UnitId = UnitId;
+            UnitId = unitId;
+            UnitName = unitname;
             Total = TotalAmount;
             Discount = DiscountAmount;
             Tax = taxAmount;

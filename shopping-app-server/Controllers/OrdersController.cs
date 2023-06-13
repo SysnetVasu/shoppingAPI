@@ -89,11 +89,13 @@ namespace API.Controllers
                
 
                 // save to db
-                this.Prefix = "ORD";
-                order.OrderNo = GetNextNumber();// "ORD-0002";
-                //orderId = Guid.NewGuid();
-              //  order.Id = orderId.ToString();
-              
+                //this.Prefix = "ORD";
+                //order.OrderNo = GetNextNumber();// "ORD-0002";
+
+                var vouchersetting = _context.VoucherSettings.Where(x => x.VoucherName == "SALESORDER").SingleOrDefault();
+                order.OrderNo = vouchersetting.VoucherPreFix + DateTime.Now.ToString("yyyyMM")
+                            + String.Format("{0, 0:D5}", vouchersetting.VoucherNextNumber);
+
                 order.CustomerId = cart.CustomerId;
                 order.OrderDate = DateTime.Today;
                 order.CreatedDate = DateTime.Now;
@@ -103,9 +105,14 @@ namespace API.Controllers
                 _context.Orders.Add(order);
 
               var  result = await _context.SaveChangesAsync();
+
+                vouchersetting.VoucherNextNumber = vouchersetting.VoucherNextNumber + 1;
+                _context.Update(vouchersetting);
+                var updateNextNumber = await _context.SaveChangesAsync();
+
                 return Ok (result);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return (null);
             }

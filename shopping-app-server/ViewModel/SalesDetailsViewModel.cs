@@ -7,20 +7,22 @@ namespace API.ViewModel
 {
     public class SalesDetailsViewModel
     {
-        public SalesDetailsViewModel(string productItemId, string productName, double price, double quantity, string unitId,
-          double TotalAmount, double DiscountAmount, double taxAmount, double NetTotalAmount)
+
+        public SalesDetailsViewModel(string productItemId, string productName, double quantity,
+            string unitid,string  unitname, double price,
+          double DiscountAmount, double TotalAmount, double taxAmount, double NetTotalAmount)
         {
             ProductId = productItemId;
-            ProductName = productName;
-            UnitPrice = price;
+            ProductName = productName;            
             Quantity = quantity;
-            UnitId = UnitId;
-            Total = TotalAmount;
+            UnitName = unitname;
+            UnitPrice = price;
             Discount = DiscountAmount;
+            Total = TotalAmount;           
             Tax = taxAmount;
             NetTotal = NetTotalAmount;
             PurchasePrice = 0;
-
+            
             //Id
             //ProductId
             //Quantity
@@ -50,8 +52,8 @@ namespace API.ViewModel
         public DateTime CreatedDate { get; set; }
         public string UpdatedBy { get; set; }
         public DateTime UpdatedDate { get; set; }
-        public int IsDeleted { get; set; }
-    
+        public int IsDeleted { get; set; }     
+
         //public decimal TotalExcludingTax => Quantity * UnitPrice;
 
         //public decimal TotalIncludingTax => TotalExcludingTax + TotalTaxAmount;
