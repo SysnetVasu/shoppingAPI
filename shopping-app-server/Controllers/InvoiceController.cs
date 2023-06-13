@@ -59,7 +59,7 @@ namespace API.Controllers
                 var company = _context.Companies.SingleOrDefault();
                 if (company != null)
                 {
-                    TaxPer = _context.Tax.Where(y => y.Id == company.TaxPerId).Select(x => x.TaxPer).SingleOrDefault();
+                    TaxPer = await _context.Tax.Where(y => y.Id == company.TaxPerId).Select(x => x.TaxPer).SingleOrDefaultAsync();
                 }
                 var orders = await _context.Orders.Where(x => x.Id == OrderNo)
                .Include(x => x.Customer)
@@ -76,7 +76,7 @@ namespace API.Controllers
                 //  var cart = data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<UserCart>(data);
                 //var SalesHeaderId = "IN-" + GetNextNumber();
                 //var SalesHeaderId = GetNextNumber();
-                var vouchersetting = _context.VoucherSettings.Where(x => x.VoucherName == "SALESINVOICE").SingleOrDefault();
+                var vouchersetting = await _context.VoucherSettings.Where(x => x.VoucherName == "SALESINVOICE").SingleOrDefaultAsync();
                 var SalesHeaderId = vouchersetting.VoucherPreFix + DateTime.Now.ToString("yyyyMM")
                             + String.Format("{0, 0:D5}", vouchersetting.VoucherNextNumber);
 
@@ -181,7 +181,7 @@ namespace API.Controllers
                 if (sale == null) return null;
                 SalesHeader salesheader = new SalesHeader();
 
-                var client = _context.Customers.SingleOrDefault(x => x.Id == sale.CustomerId);
+                var client = await _context.Customers.SingleOrDefaultAsync(x => x.Id == sale.CustomerId);
 
                 //invoice.Number = sale.InvoiceNo;
                 //invoice.Date = sale.Date;

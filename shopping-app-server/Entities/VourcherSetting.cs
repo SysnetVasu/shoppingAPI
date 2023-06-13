@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 
 namespace API.Entities
 {
-
-    public class VoucherSettings : BaseEntity
+        public class VoucherSetting : BaseEntity
     {
 
         public string VoucherName { get; set; }
