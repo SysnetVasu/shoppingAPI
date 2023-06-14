@@ -50,7 +50,7 @@ namespace API.Controllers
         }
 
         [HttpGet("CreateInvoce")]
-        public async Task<ActionResult> CreatInvoice(Int64 OrderNo)
+        public async Task<ActionResult> CreatInvoice(long OrderId)
         {
 
             try
@@ -61,7 +61,7 @@ namespace API.Controllers
                 {
                     TaxPer = await _context.Tax.Where(y => y.Id == company.TaxPerId).Select(x => x.TaxPer).SingleOrDefaultAsync();
                 }
-                var orders = await _context.Orders.Where(x => x.Id == OrderNo)
+                var orders = await _context.Orders.Where(x => x.Id == OrderId)
                .Include(x => x.Customer)
                .Include(o => o.OrderDetails).ThenInclude(y => y.Unit)
                //.OrderByDescending(x => x.CreatedDate)
