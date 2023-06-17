@@ -50,9 +50,9 @@ namespace API.Controllers
         }
 
         [HttpGet("CreateInvoce")]
-        public async Task<ActionResult> CreatInvoice(long OrderId)
+        public async Task<IActionResult> CreatInvoice(long OrderId)
         {
-
+            var returnvalue ="";
             try
             {
                 double TaxPer = 0;
@@ -139,23 +139,21 @@ namespace API.Controllers
                 var saveInvoice = await _context.SaveChangesAsync();
                 
                 orders.OrderStatusId = 1;
-                _context.Update(orders);
+                _context.Orders.Update(orders);
                 var statusUpdate = await _context.SaveChangesAsync();
 
                 vouchersetting.VoucherNextNumber = vouchersetting.VoucherNextNumber + 1;
-                _context.Update(vouchersetting);
+                _context.VoucherSettings.Update(vouchersetting);
                 var updateNumber = await _context.SaveChangesAsync();
-
-                return Ok(invoice.Id);
-
-
+                returnvalue = invoice.Id.ToString();
+                return Ok(returnvalue);
             }
             catch (Exception ex)
             {
                 ex.ToString();
-                return (null);
+                return BadRequest (ex.InnerException);
             }
-
+           
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
