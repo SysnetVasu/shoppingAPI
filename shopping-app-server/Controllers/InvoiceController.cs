@@ -127,7 +127,7 @@ namespace API.Controllers
                 invoice.InvoiceNo = SalesHeaderId.ToString();
                 invoice.TaxId = company.TaxPerId;
                 invoice.OrderNo = orders.OrderNo;
-                invoice.VoucherNo = orders.OrderNo;
+                invoice.VoucherNo = SalesHeaderId.ToString();
                 //orderId = Guid.NewGuid();
                 //  order.Id = orderId.ToString();
                 invoice.CustomerId = orders.CustomerId;
