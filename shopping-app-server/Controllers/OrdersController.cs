@@ -119,8 +119,9 @@ namespace API.Controllers
                        
             
         }
-        [HttpPost("EditOrder")]
-        public async Task<ActionResult<Entities.Order>> EdiOrder(OrderToReturnDto editOrder)
+        [HttpPost("UpdateOrder")]
+
+        public async Task<ActionResult<Entities.Order>> UpdateOrder(OrderToReturnDto editOrder)
         {
 
             try
@@ -138,6 +139,7 @@ namespace API.Controllers
 
                 var order = await _context.Orders
                   .Where(x => x.Id == editOrder.Id)
+                  .Include(x=>x.OrderDetails)
                   .SingleOrDefaultAsync();
                 //if (order == null) return Ok(false) ;
                 var items = new List<OrderDetail>();
@@ -169,8 +171,11 @@ namespace API.Controllers
                 var taxamount = items.Sum(item => item.TaxAmount);
                 var nettotal = items.Sum(item => item.NetTotal);
                 // create order
-                 order = new Entities.Order(items, subtotal, taxamount, nettotal);
-
+               //  order = new Entities.Order(items, subtotal, taxamount, nettotal);
+                order.OrderDetails = items;
+                order.TotalPrice = subtotal;
+                order.TaxAmount=taxamount;
+                order.NetTotal = nettotal;
                 // save to db
                 this.Prefix = "ORD";
                 //order.OrderNo = GetNextNumber();// "ORD-0002";
@@ -187,12 +192,10 @@ namespace API.Controllers
                 var result = await _context.SaveChangesAsync();
                 return Ok(result);
             }
-            catch (Exception)
-            {
-                return (null);
+            catch (Exception ex)
+            {   
+                return BadRequest(ex.InnerException);
             }
-
-
 
         }
         private long GetNextValue()
