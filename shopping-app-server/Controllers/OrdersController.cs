@@ -164,8 +164,6 @@ namespace API.Controllers
                     items.Add(orderItem);
                 }
 
-
-
                 // calc total
                 var subtotal = items.Sum(item => item.Price * item.Quantity);
                 var taxamount = items.Sum(item => item.TaxAmount);
@@ -181,11 +179,12 @@ namespace API.Controllers
                 //order.OrderNo = GetNextNumber();// "ORD-0002";
                 //                                //orderId = Guid.NewGuid();
                 //                                //  order.Id = orderId.ToString();
-                //editOrder.CustomerId = order.CustomerId;
+                order.CustomerId = editOrder.CustomerId;
+                
                 //editOrder.OrderDate = order.OrderDate;
 
                 //  editOrder.UpdatedDate = DateTime.Now;
-              //  var order = _mapper.Map<Entities.Order, OrderToReturnDto>(editOrder);
+                //  var order = _mapper.Map<Entities.Order, OrderToReturnDto>(editOrder);
 
                 _context.Orders.Update(order);
 
