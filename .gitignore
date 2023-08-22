@@ -10,3 +10,5 @@
 /shopping-app-server/bin/Debug/net5.0
 /shopping-app-server/obj
 /db
+/InvoicerPrint/InvoicerNETCore/bin/Release/netcoreapp3.1
+/shopping-app-server/bin/Release/net5.0

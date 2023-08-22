@@ -27,6 +27,8 @@ namespace InvoicePrintFormat.Services
 
         IInvoicerOptions Image2(string image, int width, int height);
 
+        IInvoicerOptions Image3(string image, int width, int height);
+
         /// <summary>
         /// Set the title used on the document (e.g. 'invoice' or 'quote').
         /// </summary>

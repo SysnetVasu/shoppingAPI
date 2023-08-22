@@ -39,9 +39,10 @@ namespace API.Entities
         public double Due { get; set; }
         public double Change { get; set; }
         public string Details { get; set; }
-        public string PaymentAccount { get; set; }
+        public long  PaymentAccount { get; set; }
         public string VoucherNo { get; set; }
         public string SalesManId { get; set; }
+        public long Status { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public string UpdatedBy { get; set; }

@@ -25,8 +25,17 @@ namespace API.Utility
                 if (companies.Address1 == null) companies.Address1 = "";
                 if (companies.Address2 == null) companies.Address2 = "";
                 if (companies.Address3 == null) companies.Address3 = "";
-                if (companies.Email == null) companies.Email = "";
-                if (companies.Phone == null) companies.Phone = "";
+                if (companies.Country == null) companies.Country = "";
+                if (companies.Email == null)
+                    companies.Email = "";
+                else
+                    companies.Email = "EMAIL: " + companies.Email ;
+
+                if (companies.Phone == null)
+                    companies.Phone = "";
+                else
+                    companies.Phone = "PH: " + companies.Phone;
+
                 if (companies.Country == null) companies.Country = "";
             }
             var itemRowlist = new List<ItemRow>();
@@ -54,7 +63,8 @@ namespace API.Utility
                               //.BackColor("#FFD6CC")
                               .Image1(@".\Content\images\logo1.jpeg", 150, 50)
                               .Image2(@".\Content\images\logo2.png", 150, 50)
-                              .Company(Address.Make(companies.Name, new string[] { "", companies.Address1, companies.Address2, companies.Address3, "" }, companies.Phone, companies.Email))
+                              .Image3(@".\Content\images\logo2.png", 150, 50)
+                              .Company(Address.Make(companies.Name, new string[] { "", companies.Address1, companies.Address2, companies.Address3, "", companies.Phone, companies.Email }))
                               .Client(Address.Make("BILLING TO", new string[] { client.Name, client.Address, client.Email, client.PhoneNumber, "" }))
                               //     .ClientDelivery(Address.Make("DELIVERY TO", new string[] { "Isabella Marsh KDHGLDAJGL LJDJGLDJGFDS", "Overton Circle", "Little Welland", "Worcester", "WR## 2DJ" }))
                               .Items(itemRowlist)
@@ -64,6 +74,7 @@ namespace API.Utility
                               //    ItemRow.Make("Nexus 6", "Midnight Blue,for testing", (decimal)1, 20, (decimal)166.66, (decimal)199.99),
                               //})
                               .Totals(new List<TotalRow> {
+                                    TotalRow.Make("",-1),                          
                                 TotalRow.Make("Sub Total",(decimal)invoice.GrandTotal),
                                 TotalRow.Make(tax.Name, (decimal)invoice.TotalTax),
                                 TotalRow.Make("NetTotal", (decimal)invoice.NetTotal),

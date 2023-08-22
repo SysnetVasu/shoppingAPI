@@ -75,7 +75,7 @@ namespace API.Controllers
         [HttpGet("categories")]
         public async Task<ActionResult<IReadOnlyList<Category>>> GetCategories()
         {
-            return Ok(await _context.Categories.Where(x => x.IsDeleted == false).ToListAsync());
+            return Ok(await _context.Categories.ToListAsync());
         }
 
         [HttpGet("promotiondisplay")]

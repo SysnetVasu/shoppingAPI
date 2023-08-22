@@ -183,6 +183,9 @@ namespace InvoicerNETCore.Services.Impl
             style = Pdf.Styles.AddStyle("H2-10B", "H2-10");
             style.Font.Bold = true;
 
+               style = Pdf.Styles.AddStyle("H2-10B-ColorRed", "H2-10B");
+            style.Font.Color = Colors.IndianRed;
+
             style = Pdf.Styles.AddStyle("H2-10B-Color", "H2-10B");
             style.Font.Color = MigraDocHelpers.TextColorFromHtml(Invoice.TextColor);
 

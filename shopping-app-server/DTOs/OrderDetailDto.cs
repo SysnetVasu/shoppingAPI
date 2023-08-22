@@ -14,13 +14,14 @@ namespace API.DTOs
         //public string thumbnailUrl { get; set; }
         //public double Price { get; set; }
         //public int Quantity { get; set; }
+        
+       public string ProductId { get; set; }
         public string Description { get; set; }
         public string ProductName { get; set; }
         public double Price { get; set; }
         public int Quantity { get; set; }
         public double Discount { get; set; }
-        public double Total { get; set; }
-        public string ProductId { get; set; }
+        public double Total { get; set; } 
         public string UnitId { get; set; }
         public Int64 OrdersId { get; set; }
         public UnitDto Unit {get;set;}

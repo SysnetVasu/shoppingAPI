@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <UserSecretsId>effcbb46-8080-4f7c-b1da-1a2c094d3265</UserSecretsId>
+    <UserSecretsId>effcbb46-8080-4f7c-b1da-1a2c094d3265</UserSecretsId>    
+    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,11 +33,18 @@
 
   <ItemGroup>
     <Folder Include="Content\Invoice\" />
+    <Folder Include="Content\Promotion\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\InvoicerPrint\InvoicerNETCore\InvoicePrintFormat.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

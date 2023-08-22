@@ -217,7 +217,7 @@ namespace API.Controllers
             var orders = await _context.Orders.Where(x => x.IsDeleted == false && x.OrderStatusId ==0)
                 .Include(x => x.Customer)
                 .Include(o => o.OrderDetails).ThenInclude(y => y.Unit)
-                .OrderByDescending(x=>x.CreatedDate)
+                .OrderByDescending(x=>x.Id)
                 .ToListAsync();
             var result = _mapper.Map<IReadOnlyList<Entities.Order>, IReadOnlyList<OrderToReturnDto>>(orders);
             return Ok(result);

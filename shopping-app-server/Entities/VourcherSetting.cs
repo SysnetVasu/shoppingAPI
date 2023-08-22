@@ -12,15 +12,17 @@ namespace API.Entities
         public long VoucherLength { get; set; }
         public long VoucherNextNumber { get; set; }
         public string VoucherPreFix { get; set; }
-        public long VoucherPreFixYear { get; set; }
-        public long VoucherPreFixMonth { get; set; }
-        public long VoucherPreFixDay { get; set; }
+        public string VoucherPreFixYear { get; set; }
+        public string VoucherPreFixMonth { get; set; }
+        public string VoucherPreFixDay { get; set; }
         public string VoucherPostFix { get; set; }
         public string VoucherSize { get; set; }
         public long VoucherMethod { get; set; }
         public long PrintonSave { get; set; }
         public long NoOfPrintCopy { get; set; }
         public string FormatView { get; set; }
+
+        public string FilePath { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public string UpdatedBy { get; set; }

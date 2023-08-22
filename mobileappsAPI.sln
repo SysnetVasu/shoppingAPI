@@ -5,9 +5,9 @@ VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "shopping-app-server\API.csproj", "{3D9ED7F0-F697-4B64-A130-50E2EA38FF1C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InvoicePrintFormat", ".\InvoicerPrint\InvoicerNETCore\InvoicePrintFormat.csproj", "{F3FB1F03-6802-4E01-B24B-AB5BCF1DA4C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InvoicePrintFormat", "InvoicerPrint\InvoicerNETCore\InvoicePrintFormat.csproj", "{F3FB1F03-6802-4E01-B24B-AB5BCF1DA4C5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InvoicerNETCore.CLI", ".\InvoicerPrint\InvoicerNETCore.CLI\InvoicerNETCore.CLI.csproj", "{76BBB998-5D17-4C93-8D7F-C638A048DDF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InvoicerNETCore.CLI", "InvoicerPrint\InvoicerNETCore.CLI\InvoicerNETCore.CLI.csproj", "{76BBB998-5D17-4C93-8D7F-C638A048DDF7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

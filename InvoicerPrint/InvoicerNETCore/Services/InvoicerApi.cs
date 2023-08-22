@@ -23,7 +23,7 @@ namespace InvoicePrintFormat.Services
         public InvoicerApi(
             SizeOption size = SizeOption.A4,
             OrientationOption orientation = OrientationOption.Portrait,
-            string currency = "£"
+            string currency = "$"
             )
         {
             Invoice = new Invoice();
@@ -56,6 +56,12 @@ namespace InvoicePrintFormat.Services
         }
 
         public IInvoicerOptions Image2(string image, int width, int height)
+        {
+            Invoice.Image2 = image;
+            Invoice.ImageSize = new Size(width, height);
+            return this;
+        }
+        public IInvoicerOptions Image3(string image, int width, int height)
         {
             Invoice.Image2 = image;
             Invoice.ImageSize = new Size(width, height);

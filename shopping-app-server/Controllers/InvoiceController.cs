@@ -134,7 +134,8 @@ namespace API.Controllers
                 invoice.Date = DateTime.Today;
                 invoice.CreatedDate = DateTime.Now;
                 invoice.UpdatedDate = DateTime.Now;
-
+                invoice.Status = 1;
+                invoice.PaymentAccount = 101;
                 _context.SalesHeader.Add(invoice);
                 var saveInvoice = await _context.SaveChangesAsync();
                 
@@ -143,6 +144,8 @@ namespace API.Controllers
                 var statusUpdate = await _context.SaveChangesAsync();
 
                 vouchersetting.VoucherNextNumber = vouchersetting.VoucherNextNumber + 1;
+                vouchersetting.VoucherPreFixYear = DateTime.Now.Year.ToString();
+                vouchersetting.VoucherPreFixMonth = DateTime.Now.Month.ToString();
                 _context.VoucherSettings.Update(vouchersetting);
                 var updateNumber = await _context.SaveChangesAsync();
                 returnvalue = invoice.Id.ToString();
@@ -173,7 +176,7 @@ namespace API.Controllers
 
                 var sale = await _context.SalesHeader
                  .Include(x => x.customer)
-                 .Include(x => x.SalesDetails).ThenInclude(y => y.Product).ThenInclude(z => z.Unit)
+                 .Include(x => x.SalesDetails.Where(x => x.IsDeleted >=0)).ThenInclude(y => y.Product).ThenInclude(z => z.Unit)
                  .Where(x => x.Id == InvoiceNo)
                  .SingleOrDefaultAsync();
                 if (sale == null) return null;
@@ -189,13 +192,13 @@ namespace API.Controllers
 
                 // Invoice invoice = Invoice();
                 var model = sale.MapToModel();
-                
-                PrintProcess.PrintingProcess(model, company, client, tax);
-              
                 string folderPath = "Content\\Invoice\\";
                 string fileName = model.InvoiceNo;
                 string filePath = Path.Combine(folderPath, $"{fileName}.pdf");
-
+                
+                 PrintProcess.PrintingProcess(model, company, client, tax);             
+               
+               
                 if (Directory.Exists(folderPath))
                 {
                     // Read the file bytes
@@ -245,9 +248,10 @@ namespace API.Controllers
         [HttpGet()]
         public async Task<ActionResult<IReadOnlyList<InvoiceDto>>> GetInvoiceList()
         {
-            var sales = await _context.SalesHeader.Where(x => x.IsDeleted == 0)
+            var sales = await _context.SalesHeader
                 .Include(x => x.customer)
                 .Include(o => o.SalesDetails).ThenInclude(x => x.Product).ThenInclude(y => y.Unit)
+                .OrderByDescending(x=>x.Id)
                 .ToListAsync();
             var result = _mapper.Map<IReadOnlyList<Entities.SalesHeader>, IReadOnlyList<InvoiceDto>>(sales);
             return Ok(result);
